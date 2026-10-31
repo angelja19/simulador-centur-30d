@@ -1,0 +1,23 @@
+# dependencias y compilados
+node_modules/
+dist/
+release/
+# material de referencia del curso (videos y fotos NO se suben)
+referencia/
+work/
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.jpg
+*.jpeg
+*.heic
+*.pdf
+!docs/**/*.pdf
+# el HTML original con nombre de descarga (la copia versionada está en legacy/)
+Simulador Centur 30D (1).html
+.vite/
+*.log
+.DS_Store
+Thumbs.db
