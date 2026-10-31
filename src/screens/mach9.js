@@ -289,8 +289,8 @@ export function mountMach9(root) {
     } else gfx.list.style.display = 'none';
     drawGraph(gfx.cv, A, P, { view: M.gview, trail: M.trail, rapids: M.rapids, from: M.cleared ? M.trailFrom : -1, prot: M.gview.prot, pos: tp, win: M.gview.win });
   }
-  const curF = () => { const m = toolPos(); return m && m.m && m.m.F ? m.m.F : 0; };
-  const curS = () => { const m = toolPos(); return m && m.m && m.m.rpm ? m.m.rpm : 0; };
+  const curF = () => { const m = toolPos(); return m && P.state !== 'idle' ? m.F || 0 : 0; };
+  const curS = () => { const m = toolPos(); return m && P.state !== 'idle' ? m.rpm || 0 : 0; };
   const lastS = () => { if (!A) return 0; const b = [...A.parsed.blocks].reverse().find(x => x.w.S); return b ? b.w.S.v : 0; };
   function currentPos() {
     if (M.page === 'manual' || (P.state === 'idle' && !A)) return { x: M.manual.x, z: M.manual.z };

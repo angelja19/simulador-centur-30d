@@ -28,7 +28,7 @@ function moveAt(t) {
 }
 function apply() {
   const M = moves(); if (!P.sim || !M.length) return;
-  const i = moveAt(P.t), m = M[i];
+  const i = moveAt(Math.max(0, P.t - 1e-9)), m = M[i];
   const frac = m.t1 > m.t0 ? Math.min(1, Math.max(0, (P.t - m.t0) / (m.t1 - m.t0))) : 1;
   P.sim.advanceTo(i, frac, false);
   P.mi = i;
@@ -81,7 +81,10 @@ export function stepBlock() {
   if (P.state === 'done' || !P.sim) resetPlayer();
   const blocks = A.parsed.blocks, M = moves();
   // siguiente bloque = el que sigue a P.blockLine
-  let idx = P.blockLine == null ? 0 : blocks.findIndex(b => b.line === P.blockLine) + 1;
+  let idx;
+  if (P.blockLine != null) idx = blocks.findIndex(b => b.line === P.blockLine) + 1;
+  else if (P.t > 0 && M.length) { const cur = M[moveAt(P.t)].line; idx = blocks.findIndex(b => b.line > cur); if (idx < 0) idx = blocks.length; }
+  else idx = 0;
   if (idx >= blocks.length || (A.run.endLine && P.blockLine >= A.run.endLine)) { P.state = 'done'; emit('player', P); return null; }
   const b = blocks[idx];
   P.blockLine = b.line;
@@ -104,8 +107,10 @@ export function toEnd() { stop(); if (!A) return; resetPlayer(); P.t = A.run.tot
 export function toolPos() {
   const M = moves();
   if (!M.length) return null;
-  const i = Math.max(0, moveAt(P.t)), m = M[i];
-  if (P.t <= 0 && P.mi < 0) return { x: m.x0, z: m.z0, tool: m.tool, m, i: 0 };
+  const i = Math.max(0, moveAt(Math.max(0, P.t - 1e-9))), m = M[i];
+  if (P.t <= 0 && P.mi < 0) return { x: m.x0, z: m.z0, tool: m.tool, m, i: 0, rpm: 0, F: 0 };
+  // valores modales vigentes (en un rápido se muestran la S y la F del último corte)
+  let rpm = 0, F = 0; for (let j = i; j >= 0 && (!rpm || !F); j--) { if (!rpm && M[j].rpm) rpm = M[j].rpm; if (!F && M[j].F) F = M[j].F; }
   const p = P.sim && P.sim.pos ? P.sim.pos : { z: m.z0, r: m.x0 / 2 };
-  return { x: p.r * 2, z: p.z, tool: m.tool, m, i };
+  return { x: p.r * 2, z: p.z, tool: m.tool, m, i, rpm, F };
 }

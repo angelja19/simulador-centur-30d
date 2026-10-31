@@ -543,7 +543,7 @@ export function mountSim3D(root) {
     const running = P.state === 'run' || P.state === 'block';
     let sp = ls && P.mi >= 0 && P.state !== 'idle' && P.state !== 'estop' ? ls.sp : 0;
     if (!running && m9.spindle) sp = m9.spindle;
-    const rpm = sp ? (tp && tp.m && tp.m.rpm ? tp.m.rpm : 600) * S.ui.sOv / 100 : 0;
+    const rpm = sp ? (tp && tp.rpm ? tp.rpm : 600) * S.ui.sOv / 100 : 0;
     const w = Math.min(rpm, 520) / 60 * 2 * Math.PI * (sp === 4 ? -1 : 1);
     spinAngle += w * dt; mac.rot.rotation.x = spinAngle;
     // garras, puerta, contrapunta
@@ -555,15 +555,15 @@ export function mountSim3D(root) {
     if (loadAnim) { const f = Math.min(1, (now - loadAnim) / 600); stock.position.y = (1 - f) * 120; if (f >= 1) loadAnim = 0; }
     // virutas
     const cutting = running && a && P.mi >= 0 && a.run.moves[P.mi] && a.run.moves[P.mi].kind !== 'rapid' && a.sim.mRem[P.mi] > 0.005 && sp;
-    if (cutting && S.ui.fOv > 0) for (let k = 0; k < 3; k++) {
+    if (cutting && S.ui.fOv > 0) for (let k = 0; k < 4; k++) {
       const c = chipData[chipNext]; chipNext = (chipNext + 1) % NCH;
       c.p.copy(tip).add(new THREE.Vector3((Math.random() - 0.5) * 2, 1 + Math.random() * 2, 1));
-      c.v.set((Math.random() - 0.3) * 50, 40 + Math.random() * 90, 25 + Math.random() * 60); c.w.set(Math.random() * 14, Math.random() * 14, Math.random() * 14); c.life = 3;
+      c.v.set((Math.random() - 0.3) * 50, 40 + Math.random() * 90, 25 + Math.random() * 60); c.w.set(Math.random() * 14, Math.random() * 14, Math.random() * 14); c.life = 4;
     }
     for (let i = 0; i < NCH; i++) {
       const c = chipData[i];
       if (c.life > 0) {
-        c.life -= dt; c.v.y -= 900 * dt; c.p.addScaledVector(c.v, dt);
+        c.life -= dt; c.v.y -= 380 * dt; c.p.addScaledVector(c.v, dt);
         if (c.p.y < 760) { c.p.y = 760; c.v.set(0, 0, 0); }
         c.r.x += c.w.x * dt; c.r.y += c.w.y * dt; c.r.z += c.w.z * dt;
         dummy.position.copy(c.p); dummy.rotation.copy(c.r); dummy.scale.setScalar(1);
@@ -603,7 +603,7 @@ export function mountSim3D(root) {
     const status = P.state === 'run' ? 'OPERACION AUTOMATICA' : P.state === 'block' || (P.state === 'hold' && P.blockLine != null) ? 'BLOQUE A BLOQUE' : P.state === 'done' ? 'FIN DE PROGRAMA' : P.state === 'estop' ? 'EMERGENCIA' : P.state === 'hold' ? 'CICLO DETENIDO' : 'INACTIVO';
     hud.innerHTML = `<div class="st ${P.state}">${status}</div>
       <div class="xz"><span>X</span><b>${es(-pos.z * 2, 4)}</b><span>Z</span><b>${es(pos.x + simRef().zJaw, 4)}</b></div>
-      <div class="row"><span>S ${Math.round(rpm)} rpm</span><span>F ${es((tp && tp.m && tp.m.F ? tp.m.F : 0) * S.ui.fOv / 100, 3)}</span><span>T${String(curTool).padStart(2, '0')}</span><span>${mmss(P.t)} / ${mmss(a.run.total)}</span></div>
+      <div class="row"><span>S ${Math.round(rpm)} rpm</span><span>F ${es((tp && P.state !== 'idle' ? tp.F || 0 : 0) * S.ui.fOv / 100, 3)}</span><span>T${String(curTool).padStart(2, '0')}</span><span>${mmss(P.t)} / ${mmss(a.run.total)}</span></div>
       ${bi >= 0 && P.state !== 'idle' ? `<div class="blk">N${bi + 1} corriendo · <code>${esc(b[bi].raw.trim())}</code></div>` : ''}
       <div class="mtl">${esc(S.stock.material)} · Ø${es(S.stock.barD, 2)} × ${es(S.stock.barLen, 0)}</div>`;
   }

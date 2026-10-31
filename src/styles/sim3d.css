@@ -75,10 +75,12 @@
   .s3intro b { font-size: 28px; }
 }
 @media (max-height: 520px) and (orientation: landscape) {
-  .s3keys { grid-template-columns: 1fr auto; padding: 4px 6px; }
-  .s3keys .fl, .s3keys .fb { overflow-x: auto; grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: minmax(58px, 1fr); }
-  .s3keys .key { min-height: 30px; }
+  .s3keys { display: flex; gap: 6px; padding: 4px 0 4px 6px; overflow-x: auto; align-items: center; }
+  .s3keys .fl, .s3keys .fb { display: flex; gap: 4px; }
+  .s3keys .key { min-width: 60px; min-height: 34px; }
+  .s3keys .cyc { position: sticky; right: 0; background: #2b2e32; padding: 0 6px; gap: 8px; box-shadow: -8px 0 12px #0008; }
   .s3keys .cyc .ov { display: none; }
+  .s3keys .pb { width: 34px; height: 34px; } .s3keys .pbwrap span { display: none; }
   .s3hud { transform: scale(.8); transform-origin: top left; }
   .s3drawer { position: fixed; top: 0; right: 0; bottom: 40px; z-index: 30; }
 }
