@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Simulador Centur 30D · Mach 9</title>
+  <meta name="description" content="Simulador educativo del torno CNC ROMI Centur 30D con control Mach 9: panel réplica, revisión de errores y máquina 3D. No es software de ROMI.">
+  <meta name="theme-color" content="#0f1418">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <script type="module" crossorigin src="./assets/index-DHj2pcLn.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-XKyaHtl9.js">
+  <link rel="stylesheet" crossorigin href="./assets/index-CF4vRIr9.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">R</div>
+        <div><b>Centur <i>30D</i> · Mach 9</b><br><small>Simulador educativo — no es software de ROMI</small></div>
+      </div>
+      <nav class="tabs" aria-label="Pantallas">
+        <button class="tab on" data-scr="mach9" title="Panel MACH 9">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.5" y="3" width="19" height="15" rx="2"/><rect x="5" y="5.5" width="8.5" height="7" rx="1" fill="currentColor" opacity=".25"/><path d="M15.5 6h3M15.5 8.5h3M15.5 11h3M5 15h2M9 15h2M13 15h2M8 21h8M12 18v3"/></svg>
+          <span>MACH 9</span></button>
+        <button class="tab" data-scr="sim3d" title="Simulador completo 3D">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 18h20M3 18V8l4-3h11l3 3v10"/><circle cx="8" cy="12" r="2.6"/><path d="M10.6 12H16M16 9.5h3v5h-3z"/></svg>
+          <span>SIMULADOR</span></button>
+      </nav>
+      <div class="menu" id="menu">
+        <button class="tbtn" id="menuBtn" aria-haspopup="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>Archivo</span></button>
+        <div class="drop" role="menu">
+          <button data-act="paste">📋 Pegar programa</button>
+          <button data-act="open">📂 Abrir archivo .nc / .txt</button>
+          <button data-act="example">🧩 Programa de ejemplo del curso</button>
+          <button data-act="cam">⚙ Generar programa (CAM) desde un perfil</button>
+          <hr>
+          <button data-act="nc">💾 Exportar .nc</button>
+          <button data-act="png">🖼 Exportar imagen PNG</button>
+          <button data-act="stl">🧊 Exportar pieza STL</button>
+          <button data-act="pdf">📄 Reporte PDF</button>
+          <hr>
+          <button data-act="install" hidden>⬇ Instalar la app</button>
+          <button data-act="about">ℹ Acerca de</button>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section id="scr-mach9" class="screen on" aria-label="Panel Mach 9"></section>
+      <section id="scr-sim3d" class="screen" aria-label="Simulador completo"></section>
+    </main>
+    <section class="errors" id="errors" aria-label="Panel de errores"></section>
+  </div>
+</body>
+</html>

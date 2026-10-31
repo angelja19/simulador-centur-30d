@@ -1,0 +1,18 @@
+{
+  "name": "Simulador Centur 30D · Mach 9",
+  "short_name": "Centur 30D",
+  "description": "Simulador educativo del torno CNC ROMI Centur 30D con control Mach 9. No es software de ROMI.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0c1013",
+  "theme_color": "#0f1418",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
