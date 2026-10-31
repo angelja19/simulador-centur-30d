@@ -1,0 +1,31 @@
+name: Instalador de Windows (.exe) en Releases
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run dist:win
+      - name: Publicar en Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || 'v1.0.0' }}
+          name: Simulador Centur 30D ${{ github.ref_type == 'tag' && github.ref_name || 'v1.0.0' }}
+          body: |
+            Instalador para Windows del simulador educativo ROMI Centur 30D · Mach 9.
+            Descarga **Simulador-Centur-30D-Setup.exe** y ejecútalo. Funciona sin internet.
+            Windows puede mostrar "Windows protegió su PC" porque el instalador no está firmado: elige "Más información" → "Ejecutar de todas formas".
+            Simulador educativo: no es software de ROMI.
+          files: release/Simulador-Centur-30D-Setup.exe
+          make_latest: true
