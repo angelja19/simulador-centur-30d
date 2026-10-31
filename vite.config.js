@@ -11,7 +11,7 @@ function precache() {
       const dist = 'dist', files = [];
       const walk = d => readdirSync(d).forEach(f => { const p = join(d, f); statSync(p).isDirectory() ? walk(p) : files.push(relative(dist, p).split(sep).join('/')); });
       walk(dist);
-      const list = files.filter(f => f !== 'sw.js' && !f.endsWith('.map'));
+      const list = files.filter(f => f !== 'sw.js' && !f.endsWith('.map') && !/-(cyrillic|greek|vietnamese)(-ext)?-/.test(f) && !f.endsWith('.woff'));
       const sw = readFileSync('src/sw-template.js', 'utf8').replace('__FILES__', JSON.stringify(['./', ...list.map(f => './' + f)])).replace('__VERSION__', Date.now().toString(36));
       writeFileSync(join(dist, 'sw.js'), sw);
     }
