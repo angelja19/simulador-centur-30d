@@ -50,7 +50,7 @@ export function checkMachine(parsed, run, stock, opts = {}) {
     if (w.S.v > M.spindle.rpmMax) add('error', b.line, 'ROTACIÓN EXCEDE EL MÁXIMO', `S${w.S.txt}: el husillo de la Centur 30D gira como máximo ${M.spindle.rpmMax} rpm.`);
     else if (w.S.v > 0 && w.S.v < M.spindle.rpmMin) add('warn', b.line, 'ROTACIÓN MENOR QUE EL MÍNIMO', `S${w.S.txt}: el mínimo del husillo es ${M.spindle.rpmMin} rpm.`);
   }
-  if (run.rpmMax > M.spindle.rpmMax + 0.5) {
+  if (run.rpmMax > M.spindle.rpmMax + 0.5 && parsed.blocks.some(b => b.w.G && Math.round(b.w.G.v) === 96)) {
     const m = run.moves.find(mv => mv.rpm > M.spindle.rpmMax + 0.5);
     if (m) add('warn', m.line, 'G96 SIN LÍMITE DE ROTACIÓN', `Con velocidad de corte constante la rotación llega a ${Math.round(m.rpm)} rpm; programa G92 S${M.spindle.rpmMax} o menos.`);
   }

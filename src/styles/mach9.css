@@ -98,8 +98,8 @@
 .knob .lbl { position: absolute; left: 0; right: 0; bottom: -18px; text-align: center; font: 600 12px var(--disp); color: #dfe3e6; }
 .knob .val { position: absolute; left: 0; right: 0; top: -16px; text-align: center; font: 600 11px var(--mono); color: var(--amber); }
 .knob.small { width: 62px; height: 62px; } .knob.small .cap { inset: 12px; }
-.sel { display: grid; justify-items: center; gap: 2px; }
-.sel .pm { display: flex; gap: 22px; font: 700 14px var(--disp); color: #ddd; }
+.selk { display: grid; justify-items: center; gap: 2px; }
+.selk .pm { display: flex; gap: 22px; font: 700 14px var(--disp); color: #ddd; }
 .badge { display: grid; justify-items: end; gap: 10px; }
 .badge .romi { display: flex; align-items: center; gap: 8px; background: #1f2225; padding: 4px 10px; border-radius: 4px; font: 700 15px var(--disp); color: #e8e8e8; box-shadow: 0 0 0 1px #000 inset; }
 .badge .romi b { width: 18px; height: 18px; border-radius: 50%; border: 3px solid #e8e8e8; display: inline-block; }

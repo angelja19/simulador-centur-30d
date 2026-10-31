@@ -1,1 +1,84 @@
-/* pantalla 2: ver sim3d.js */ .loading3d{display:grid;place-items:center;height:100%;font:600 18px var(--disp);color:var(--muted)}
+/* ===== Pantalla 2 · Simulador completo ===== */
+#scr-sim3d { grid-template-columns: minmax(0, 1fr) auto; min-height: 0; }
+.loading3d { display: grid; place-items: center; height: 100%; font: 600 18px var(--disp); color: var(--muted); }
+.s3main { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-width: 0; min-height: 0; }
+.s3view { position: relative; min-height: 0; overflow: hidden; background: #1a2126; }
+.s3view canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+.s3labels { position: absolute; inset: 0; pointer-events: none; }
+.s3labels .dimlbl { background: #111a; border: 1px solid #ffd54a; color: #ffe9a6; font: 600 12px var(--mono); padding: 1px 6px; border-radius: 6px; white-space: nowrap; }
+.s3hud { position: absolute; left: 12px; top: 12px; background: linear-gradient(#0b1410e6, #07100ce6); border: 1px solid #1f5a33; border-radius: 12px; padding: 8px 12px; color: var(--phos); font: 16px var(--vt); text-shadow: 0 0 6px #5dff8a66; min-width: 250px; box-shadow: 0 10px 30px #0008; pointer-events: none; }
+.s3hud .st { display: inline-block; background: var(--phos); color: #021; text-shadow: none; padding: 1px 8px; font-size: 17px; border-radius: 3px; }
+.s3hud .st.estop { background: var(--red); color: #fff; }
+.s3hud .xz { display: grid; grid-template-columns: auto 1fr auto 1fr; gap: 0 8px; font-size: 24px; margin-top: 4px; }
+.s3hud .xz span { opacity: .6; }
+.s3hud .row { display: flex; gap: 12px; font-size: 17px; flex-wrap: wrap; }
+.s3hud .blk { font-size: 16px; margin-top: 2px; max-width: 380px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.s3hud .blk code { font: inherit; background: #8dffa622; padding: 0 4px; }
+.s3hud .mtl { font-size: 15px; opacity: .7; }
+.s3tools { position: absolute; right: 12px; top: 12px; display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; max-width: 60%; }
+.s3btn { border: 1px solid #ffffff22; background: #0f171cd9; backdrop-filter: blur(6px); color: #e8f0f2; padding: 8px 12px; border-radius: 10px; font: 600 14px var(--disp); cursor: pointer; transition: background .15s, transform .1s; }
+.s3btn:hover { background: #1d2c35; } .s3btn.on { background: #1f6f8f; border-color: #3db4d6; }
+.s3flash { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle, #ff3b3000 30%, #ff3b30aa 100%); opacity: 0; }
+.s3flash.on { animation: flashred .9s ease-out; }
+@keyframes flashred { 0% { opacity: 1; } 100% { opacity: 0; } }
+.s3intro { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; background: radial-gradient(circle, #0000, #000c); color: #fff; pointer-events: none; transition: opacity 1.2s; }
+.s3intro b { font: 700 42px var(--disp); letter-spacing: 1px; } .s3intro span { font: 500 18px var(--disp); color: #cfe; }
+.s3intro.off { opacity: 0; }
+.s3prep { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); background: #2a1d0bf0; border: 1px solid #a8761f; color: #ffe2a6; border-radius: 12px; padding: 10px 14px; display: flex; gap: 14px; align-items: center; font: 500 14px var(--disp); box-shadow: 0 12px 30px #000a; max-width: calc(100% - 24px); flex-wrap: wrap; }
+.s3prep[hidden] { display: none; }
+
+/* tira de teclas F del Mach 9 */
+.s3keys { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; gap: 6px 12px; padding: 8px 10px; background: linear-gradient(#383c41, #25282c); border-top: 1px solid #000; }
+.s3keys .fl, .s3keys .fb { display: grid; gap: 5px; }
+.s3keys .fl { grid-template-columns: repeat(9, 1fr); }
+.s3keys .fb { grid-template-columns: .7fr repeat(5, 1.5fr) .7fr 1fr; }
+.s3keys .key { min-height: 38px; font-size: 11px; line-height: 1.05; text-align: center; }
+.s3keys .key small { position: static; display: block; font-size: 9px; opacity: .55; }
+.s3keys .cyc { grid-column: 2; grid-row: 1 / span 2; display: flex; align-items: center; gap: 12px; }
+.s3keys .ov { display: grid; font: 600 11px var(--disp); color: #ddd; }
+.s3keys .ov input { width: 110px; accent-color: var(--amber); }
+
+/* cajón lateral */
+.s3drawer { width: 0; overflow: hidden; background: #11181d; border-left: 1px solid var(--line); transition: width .25s ease; display: grid; grid-template-rows: auto 1fr; min-height: 0; }
+.s3drawer.open { width: min(380px, 92vw); }
+.s3drawer .dh { display: flex; gap: 4px; padding: 8px; border-bottom: 1px solid var(--line); }
+.s3drawer .dh button { flex: 1; border: 0; background: #1a242b; color: #cdd; border-radius: 8px; padding: 7px 4px; font: 600 13px var(--disp); cursor: pointer; }
+.s3drawer .dh button.on { background: #1f6f8f; color: #fff; }
+.s3drawer .dh .x { flex: 0 0 34px; }
+.dbody { overflow: auto; padding: 10px 12px 18px; display: grid; gap: 10px; align-content: start; min-width: 340px; }
+.dbody h4 { margin: 6px 0 0; font: 700 15px var(--disp); color: #cfe9f3; }
+.hint { color: var(--muted); font: 13px var(--disp); margin: 0; }
+.mats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.mat { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: #0d1418; color: #dde; border-radius: 10px; padding: 6px 8px; font: 500 13px var(--disp); cursor: pointer; text-align: left; }
+.mat i { width: 22px; height: 22px; border-radius: 50%; flex: none; }
+.mat.on { border-color: var(--romi); background: #12303b; }
+.trow { display: grid; grid-template-columns: 42px 1fr auto; gap: 8px; align-items: center; }
+.trow select, .trow input { background: #0a0f12; border: 1px solid var(--line); border-radius: 8px; padding: 6px; color: var(--fg); font: 13px var(--mono); min-width: 0; }
+.trow .rn { display: flex; gap: 4px; align-items: center; color: var(--muted); font: 12px var(--mono); }
+.dbody .acts { display: flex; justify-content: flex-end; }
+.tbtn.on { border-color: var(--romi); background: #12303b; }
+.devc svg { display: block; }
+
+@media (max-width: 760px) {
+  #scr-sim3d { grid-template-columns: 1fr; }
+  .s3drawer { position: fixed; left: 0; right: 0; bottom: var(--errh); width: auto !important; height: 0; border-left: 0; border-top: 1px solid var(--line); z-index: 30; transition: height .25s; box-shadow: 0 -10px 30px #000a; }
+  .s3drawer.open { height: 62dvh; }
+  .dbody { min-width: 0; }
+  .s3hud { min-width: 0; font-size: 13px; padding: 6px 8px; left: 6px; top: 6px; }
+  .s3hud .xz { font-size: 18px; } .s3hud .row { font-size: 14px; gap: 8px; } .s3hud .blk { max-width: 60vw; }
+  .s3tools { top: auto; bottom: 8px; right: 8px; max-width: calc(100% - 16px); }
+  .s3btn { padding: 7px 9px; font-size: 13px; }
+  .s3keys { grid-template-columns: 1fr; padding: 6px; }
+  .s3keys .fl, .s3keys .fb { overflow-x: auto; grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: minmax(64px, 1fr); }
+  .s3keys .cyc { grid-column: 1; grid-row: auto; justify-content: space-between; }
+  .s3keys .key { min-height: 42px; }
+  .s3intro b { font-size: 28px; }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .s3keys { grid-template-columns: 1fr auto; padding: 4px 6px; }
+  .s3keys .fl, .s3keys .fb { overflow-x: auto; grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: minmax(58px, 1fr); }
+  .s3keys .key { min-height: 30px; }
+  .s3keys .cyc .ov { display: none; }
+  .s3hud { transform: scale(.8); transform-origin: top left; }
+  .s3drawer { position: fixed; top: 0; right: 0; bottom: 40px; z-index: 30; }
+}

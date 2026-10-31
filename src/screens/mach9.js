@@ -70,7 +70,7 @@ export function mountMach9(root) {
   const estop = el('button', { class: 'estop', 'aria-label': 'Parada de emergencia' }, el('i'));
   const pb = (cls, label, aria) => el('div', { class: 'pbwrap' }, el('button', { class: 'pb ' + cls, 'aria-label': aria }, el('i')), el('span', null, label));
   const bRed = pb('red', 'STOP', 'Cycle stop'), bOr = pb('orange', 'BLOQUE', 'Bloque a bloque'), bGr = pb('green', 'START', 'Cycle start');
-  const lower = el('div', { class: 'lower' }, estop, el('div', { class: 'sel' }, kSel, el('div', { class: 'pm' }, el('span', null, '−'), el('span', null, '+'))), kF, kS,
+  const lower = el('div', { class: 'lower' }, estop, el('div', { class: 'selk' }, kSel, el('div', { class: 'pm' }, el('span', null, '−'), el('span', null, '+'))), kF, kS,
     el('div', { class: 'badge' }, el('div', { class: 'romi' }, el('b'), 'ROMI', el('span', null, 'MACH 9'))),
     el('div', { class: 'btn3' }, bRed, bOr, bGr));
   const m9 = el('div', { class: 'm9', 'data-sec': 'abc' }, el('div', { class: 'bezel' },
@@ -196,6 +196,7 @@ export function mountMach9(root) {
     }
     baseMsg(); updateSide(); fitFont();
     if (M.alarmBox) main.append(M.alarmBox);
+    emit('m9render', M);
   }
   const HELP = {
     acceso: 'Escribe el código de acceso y ENTER.<br>► / ▲ cambian el grupo F10–F14.<br>F10 con EN MANDO conecta los ejes.<br>EXIT va al menú principal.',
@@ -639,6 +640,15 @@ export function mountMach9(root) {
   on('fkey', k => press(k));       // teclas F desde otra pantalla (no usado por defecto)
   on('cycleKey', w => (w === 'start' ? green : w === 'block' ? orange : red)());
   on('mach9state', fn => fn(M));
+  // preparación rápida (desde el simulador 3D): acceso, EN MANDO y referencia
+  on('quickprep', () => {
+    if (!M.access) M.access = 2;
+    M.axes = true; M.alarm = null; M.visitedMode = true; emit('axes', true);
+    const back = M.page === 'acceso' || M.page === 'manual' ? 'modo' : M.page;
+    M.page = 'manual'; M.refWait = true; doReference();
+    setTimeout(() => { M.page = back; render(); }, 1750);
+    toast('Acceso nivel 2 · EN MANDO · referenciando la máquina…');
+  });
 
   render();
   return { M, press, green, orange, red };

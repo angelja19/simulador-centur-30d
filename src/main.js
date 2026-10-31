@@ -8,6 +8,7 @@ import { mountMach9 } from './screens/mach9.js';
 import { el, toast, modal, download, pickFile } from './ui/dom.js';
 import { DEFAULT_PROGRAM, MACHINE } from './core/index.js';
 import { openCamDialog } from './ui/camdialog.js';
+import * as player from './player.js';
 
 const $ = s => document.querySelector(s);
 mountErrors($('#errors'));
@@ -69,4 +70,4 @@ if (S.ui.screen === 'sim3d') showScreen('sim3d');
 if ('serviceWorker' in navigator && location.protocol.startsWith('http') && !import.meta.env.DEV) {
   navigator.serviceWorker.register('./sw.js').catch(() => { /* sin SW */ });
 }
-window.__app = { S, get A() { return A; }, mach9, emit, setCode };
+window.__app = { S, get A() { return A; }, mach9, emit, setCode, player };

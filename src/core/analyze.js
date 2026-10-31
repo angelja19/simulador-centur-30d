@@ -71,7 +71,7 @@ export function analyze(code, cfg) {
   parsed.msgs.concat(run.msgs).forEach(add);
   const M = run.moves, ap = cfg.ap || 1;
   M.forEach((m, i) => {
-    if (sim.mColl[i]) add({ sev: 'error', line: m.line, code: 'COLISIÓN EN RÁPIDO (G0)', text: `El avance rápido atraviesa material hasta X${fmt(m.x1)} Z${fmt(m.z1)}.`, mi: i });
+    if (sim.mColl[i]) add({ sev: 'error', line: m.line, code: 'COLISIÓN EN RÁPIDO (G0)', text: `El avance rápido atraviesa material en el tramo hacia Ø${es(m.x1, 2)} Z${es(m.z1, 2)}.`, mi: i });
     if (sim.mChuck[i]) add({ sev: 'error', line: m.line, code: 'CHOQUE CON EL PLATO', text: `La herramienta pasa la cara de las garras (Z${es(sim.zJaw, 2)}).`, mi: i });
     const d = sim.mDepth[i];
     if (d > ap + 0.05) add({ sev: 'warn', line: m.line, code: 'PROFUNDIDAD MAYOR QUE ap', text: `Esta pasada corta ${es(d, 2)} mm en ${sim.mAxis[i] === 2 ? 'Z' : 'X'}; el máximo elegido es ap = ${es(ap, 2)} mm.`, mi: i });

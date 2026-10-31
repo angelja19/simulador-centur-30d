@@ -10,6 +10,7 @@ process.on('unhandledRejection', e => { fs.writeFileSync('work/shot-err.txt', St
 app.whenReady().then(async () => {
   const win = new BrowserWindow({ width: +w, height: +h, show: true, x: -4000, y: 0, skipTaskbar: true, frame: false, webPreferences: { backgroundThrottling: false }, paintWhenInitiallyHidden: true });
   const logs = [];
+  win.webContents.session.on('will-download', (e, item) => { const f = require('path').resolve('work/downloads', item.getFilename()); require('fs').mkdirSync('work/downloads', { recursive: true }); item.setSavePath(f); item.once('done', (ev, st) => logs.push('DOWNLOAD ' + st + ' ' + item.getFilename() + ' ' + item.getTotalBytes())); });
   win.webContents.on('console-message', (e, level, msg) => logs.push(`[${level}] ${msg}`));
   win.webContents.on('render-process-gone', (e, d) => logs.push('GONE ' + JSON.stringify(d)));
   await win.loadURL(url);
